@@ -1,0 +1,15 @@
+{
+  "name": "anderdingus",
+  "maker": "ander dingus",
+  "body": "round",
+  "fins": "pointy",
+  "pattern": "stripes",
+  "colors": {
+    "body": "#e6bd95",
+    "fins": "#66b3ed",
+    "pattern": "#cfab84"
+  },
+  "size": 0.75,
+  "speed": 0.75,
+  "behavior": "calm"
+}

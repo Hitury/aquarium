@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 // Bouwt een vis uit simpele vormen zodra de FishLoader een vis meldt.
 // Zet dit script op hetzelfde GameObject als de FishLoader.
@@ -14,11 +15,20 @@ public class FishFactory : MonoBehaviour
              "dit materiaal laat Unity de shader weg en worden de vissen roze.")]
     public Material fishMaterial;
 
+    [Tooltip("Unity's ingebouwde Sphere-mesh. Door hem hier te koppelen komt hij zeker mee in de build.")]
+    public Mesh sphereMesh;
+
+    [Tooltip("Unity's ingebouwde Cube-mesh. Door hem hier te koppelen komt hij zeker mee in de build.")]
+    public Mesh cubeMesh;
+
+    public List<GameObject> fishList;
+
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
     private static readonly Color FallbackColor = Color.gray;
 
     private void Awake()
     {
+        fishList = new List<GameObject>();
         GetComponent<FishLoader>().FishLoaded += BuildFish;
     }
 
@@ -28,6 +38,8 @@ public class FishFactory : MonoBehaviour
         GameObject fish = new GameObject("Fish_" + data.id);
         fish.transform.SetParent(transform);
         fish.transform.position = tank.RandomPoint();
+
+        fishList.Add(fish);
 
         Color bodyColor = ParseColor(data.colors?.body, data.id);
         Color finColor = ParseColor(data.colors?.fins, data.id);
@@ -108,9 +120,12 @@ public class FishFactory : MonoBehaviour
     private void AddPart(GameObject fish, PrimitiveType shape, string partName,
                          Vector3 position, Vector3 scale, Vector3 rotation, Color color)
     {
-        GameObject part = GameObject.CreatePrimitive(shape);
-        part.name = partName;
-        Destroy(part.GetComponent<Collider>()); // vissen hoeven nergens tegenaan te botsen
+        // Zelf opbouwen in plaats van GameObject.CreatePrimitive: die voegt altijd een collider toe.
+        // De vissen botsen nergens tegenaan, dus die is niet nodig. Bovendien haalt 'Strip Engine Code'
+        // SphereCollider uit de WebGL-build (de scène gebruikt alleen BoxColliders), waardoor
+        // CreatePrimitive(Sphere) daar een foutmelding gaf.
+        GameObject part = new GameObject(partName, typeof(MeshFilter), typeof(MeshRenderer));
+        part.GetComponent<MeshFilter>().sharedMesh = GetMesh(shape);
         part.transform.SetParent(fish.transform, false);
         part.transform.localPosition = position;
         part.transform.localScale = scale;
@@ -130,11 +145,37 @@ public class FishFactory : MonoBehaviour
         partRenderer.SetPropertyBlock(block);
     }
 
+    // De vorm (bol of kubus). Komt uit de velden Sphere Mesh en Cube Mesh in de Inspector:
+    // alleen meshes waar de scène naar verwijst, gaan zeker mee in de WebGL-build.
+    // (Resources.GetBuiltinResource werkt in de editor wel, maar in de build niet betrouwbaar.)
+    private Mesh GetMesh(PrimitiveType shape)
+    {
+        Mesh mesh = shape == PrimitiveType.Cube ? cubeMesh : sphereMesh;
+        if (mesh == null)
+            Debug.LogWarning($"FishFactory: vul het veld '{shape} Mesh' in de Inspector.");
+        return mesh;
+    }
+
     private Color ParseColor(string hex, string fishId)
     {
         if (hex != null && ColorUtility.TryParseHtmlString(hex, out Color color))
             return color;
         Debug.LogWarning($"Vis '{fishId}': ongeldige kleur '{hex}', ik gebruik grijs.");
         return FallbackColor;
+    }
+
+    public GameObject GetRandomFish() 
+    {
+
+        if (fishList.Count == 0) {
+
+            return null;
+
+        } else {
+
+            return fishList[UnityEngine.Random.Range(0, fishList.Count)].gameObject;
+
+        }
+
     }
 }

@@ -1,0 +1,15 @@
+{
+  "name": "Visservis",
+  "maker": "Sander",
+  "body": "round",
+  "fins": "pointy",
+  "pattern": "stripes",
+  "colors": {
+    "body": "#f584f1",
+    "fins": "#ed66ce",
+    "pattern": "#8f3ce8"
+  },
+  "size": 1.5,
+  "speed": 1.5,
+  "behavior": "curious"
+}

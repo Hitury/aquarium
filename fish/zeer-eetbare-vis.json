@@ -1,0 +1,15 @@
+{
+  "name": "zeer eetbare vis",
+  "maker": "Pascal",
+  "body": "long",
+  "fins": "small",
+  "pattern": "stripes",
+  "colors": {
+    "body": "#fcccae",
+    "fins": "#9ff777",
+    "pattern": "#6d009c"
+  },
+  "size": 1.5,
+  "speed": 1.5,
+  "behavior": "curious"
+}

@@ -27,3 +27,7 @@ Per onderdeel staan er bewust maar twee keuzes in. Voeg je er een toe, bijvoorbe
 3. In Unity: een onderdeel in de catalogus.
 
 Controleer daarna met `python tools/validate_fish.py` en `python tools/check_maker.py`. Deze controles geven een foutmelding als er verschil zit tussen de drie onderdelen.
+
+## scheldwoorden.json
+
+Hashes van scheldwoorden: de validator en de Vissenmaker keuren een naam met zo'n woord af. De woorden zelf staan niet in de repository. Toevoegen of testen gaat met `python tools/scheldwoorden.py` (zie de uitleg bovenin dat bestand).

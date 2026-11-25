@@ -11,13 +11,13 @@ Unity 6000.3.27f1 (LTS)
 ## Hoe werkt het?
 
 1. Je ontwerpt een vis in de **Vissenmaker** en krijgt een visbestand in JSON.
-2. Je zet dat bestand in de map `fish/` en opent een **pull request**.
+2. Je zet dat bestand in de map `fish/` en opent een **pull request**. Dat kan in één keer met de knop **Stuur in via GitHub** in de Vissenmaker, of zelf met een clone en een branch.
 3. Een automatische controle kijkt of je vis klopt. Daarna bekijkt een docent je PR.
 4. Na de merge wordt de site opnieuw gebouwd en zwemt je vis in het **Unity-aquarium**.
 
 ## Doe mee
 
-Je eerste bijdrage: voeg je eigen vis toe met een fork en een pull request. Hoe dat werkt, lees je in [CONTRIBUTING.md](CONTRIBUTING.md).
+Je eerste bijdrage: voeg je eigen vis toe met een fork en een pull request. Hoe dat werkt, lees je in [CONTRIBUTING.md](CONTRIBUTING.md). Daar staan twee routes: de snelle route met de knop **Stuur in via GitHub**, en de route met clone en branch die je ook voor andere taken gebruikt.
 
 Heb je je eerste vis toegevoegd? Kijk dan bij de [issues](https://github.com/Firda-Software-Development-Drachten/aquarium/issues) voor een volgende taak om op te pakken. Je kunt het Unity-project aanvullen (C#), je kunt de validatie verbeteren (Python) of je kunt aan de Vissenmaker werken (HTML/CSS/JS).
 
@@ -39,6 +39,35 @@ Je hebt alleen Python nodig, geen extra pakketten.
 python tools/validate_fish.py   # klopt mijn vis?
 python tools/check_maker.py     # past de Vissenmaker bij options.json?
 ```
+
+## Hall of Fame
+<!-- hall-of-fame:start -->
+### Matthijs 
+- Billy
+- Lemon
+### Michael 
+- Boris Johnson
+### Bram 
+- Bram
+### Akshay 
+- Dark Blue Moon
+### fickle 
+- fihcle
+### IJsbrand 
+- Gopher
+### Joshua 
+- Greeny
+### Mourad 
+- blob
+### Ivan 
+- RodeVis
+### Silvan 
+- Visjuhh
+### Firda 
+- Voorbeeld
+### Yok 
+- white
+<!-- hall-of-fame:end -->
 
 ## Licentie
 

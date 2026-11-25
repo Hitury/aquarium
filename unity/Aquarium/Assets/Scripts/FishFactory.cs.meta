@@ -1,2 +1,15 @@
 fileFormatVersion: 2
 guid: 1425416c7f9596e478f4cbb89866b050
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - tank: {instanceID: 0}
+  - fishMaterial: {fileID: 2100000, guid: fb9eef4fd382f4443ac55d5b5f306052, type: 2}
+  - sphereMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  - cubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

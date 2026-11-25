@@ -1,0 +1,103 @@
+# Open dag: keurt een nieuwe vis automatisch goed en zet hem in het aquarium,
+# zodat een bezoeker zijn vis binnen een paar minuten ziet zwemmen.
+#
+# Werkt ALLEEN als:
+#   - de repository-variabele OPENDAG_AUTOMERGE op "aan" staat (Settings > Secrets and variables > Actions > Variables);
+#   - de pull request komt van het account in de variabele OPENDAG_ACCOUNT (bijvoorbeeld firda-opendag);
+#   - de pull request alleen één nieuw bestand fish/<naam>.json toevoegt;
+#   - die vis door tools/validate_fish.py komt (ook de lijst met geblokkeerde woorden).
+# Alle andere pull requests blijven gewoon wachten op een docent.
+#
+# Veiligheid: pull_request_target draait met de rechten van deze repository. Daarom
+# wordt de code uit de pull request NOOIT uitgevoerd. We halen alleen de tekst van het
+# visbestand op en controleren die met de tools van main.
+#
+# Nodig in Settings > Actions > General: "Allow GitHub Actions to create and approve pull requests".
+name: opendag-automerge
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+# Eén groep per pull request. Met één groep voor alles zou GitHub bij drie bezoekers
+# tegelijk de middelste run annuleren (er mag maar één run wachten).
+concurrency:
+  group: opendag-automerge-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  automerge:
+    if: >-
+      vars.OPENDAG_AUTOMERGE == 'aan' &&
+      github.event.pull_request.user.login == vars.OPENDAG_ACCOUNT &&
+      github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PR: ${{ github.event.pull_request.number }}
+      REPO: ${{ github.repository }}
+      SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: Code van main ophalen (niet die van de pull request)
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Python instellen
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Controleren dat alleen één nieuwe vis wordt toegevoegd
+        id: bestand
+        run: |
+          gh api "repos/$REPO/pulls/$PR/files" --jq '.[] | "\(.status) \(.filename)"' > files.txt
+          cat files.txt
+          if [ "$(wc -l < files.txt)" -ne 1 ]; then echo "Meer dan één bestand: geen automatische goedkeuring."; exit 1; fi
+          read -r status filename < files.txt
+          if [ "$status" != "added" ]; then echo "Geen nieuw bestand: geen automatische goedkeuring."; exit 1; fi
+          if ! echo "$filename" | grep -Eq '^fish/[a-z0-9-]{1,30}\.json$'; then echo "Geen visbestand: geen automatische goedkeuring."; exit 1; fi
+          echo "filename=$filename" >> "$GITHUB_OUTPUT"
+
+      - name: Visbestand ophalen als tekst en controleren
+        env:
+          FILE: ${{ steps.bestand.outputs.filename }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+        run: |
+          if [ -e "$FILE" ]; then echo "$FILE bestaat al op main: geen automatische goedkeuring."; exit 1; fi
+          gh api "repos/$HEAD_REPO/contents/$FILE?ref=$SHA" -H "Accept: application/vnd.github.raw" > "$FILE"
+          if [ "$(wc -c < "$FILE")" -gt 2000 ]; then echo "Bestand is te groot."; exit 1; fi
+          python tools/validate_fish.py
+
+      # Is validate een verplichte controle in de ruleset, dan kan de merge pas als die klaar is.
+      # We wachten alleen op validate: op alle controles wachten zou ook op deze workflow zelf wachten.
+      - name: Wachten op de controle validate
+        run: |
+          for i in $(seq 1 40); do
+            result=$(gh api "repos/$REPO/commits/$SHA/check-runs?check_name=validate" \
+              --jq '[.check_runs[] | "\(.status) \(.conclusion)"] | first // "geen"')
+            echo "validate: $result"
+            case "$result" in
+              "completed success") exit 0 ;;
+              completed*) echo "validate is niet geslaagd: geen automatische goedkeuring."; exit 1 ;;
+            esac
+            sleep 15
+          done
+          echo "validate is na 10 minuten niet klaar. Moet de run nog worden goedgekeurd (fork)?"
+          exit 1
+
+      # --match-head-commit: alleen samenvoegen als de PR nog precies de gecontroleerde versie is.
+      - name: Goedkeuren en samenvoegen
+        run: |
+          gh pr review "$PR" --repo "$REPO" --approve --body "Open dag: je vis is automatisch goedgekeurd. Hij zwemt zo in het aquarium!"
+          gh pr merge "$PR" --repo "$REPO" --squash --match-head-commit "$SHA" --delete-branch=false
+
+      # Een merge door deze workflow start de Pages-workflow niet vanzelf, dus starten we hem zelf.
+      - name: Aquarium opnieuw bouwen
+        run: gh workflow run pages.yml --repo "$REPO" --ref main

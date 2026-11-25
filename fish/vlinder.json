@@ -1,0 +1,15 @@
+{
+  "name": "Vlinder",
+  "maker": "Carla",
+  "body": "long",
+  "fins": "pointy",
+  "pattern": "stripes",
+  "colors": {
+    "body": "#7335de",
+    "fins": "#ed344a",
+    "pattern": "#203a99"
+  },
+  "size": 1.5,
+  "speed": 1.5,
+  "behavior": "curious"
+}

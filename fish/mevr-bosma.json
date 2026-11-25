@@ -1,0 +1,15 @@
+{
+  "name": "Mevr. Bosma",
+  "maker": "Tygo",
+  "body": "long",
+  "fins": "small",
+  "pattern": "none",
+  "colors": {
+    "body": "#ffadf7",
+    "fins": "#fad4ff",
+    "pattern": "#000000"
+  },
+  "size": 0.75,
+  "speed": 0.75,
+  "behavior": "curious"
+}

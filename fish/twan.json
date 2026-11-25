@@ -1,0 +1,15 @@
+{
+  "name": "Twan",
+  "maker": "Roan",
+  "body": "long",
+  "fins": "pointy",
+  "pattern": "stripes",
+  "colors": {
+    "body": "#ff0000",
+    "fins": "#00eaff",
+    "pattern": "#1eff00"
+  },
+  "size": 1.5,
+  "speed": 0.75,
+  "behavior": "curious"
+}

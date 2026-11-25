@@ -258,6 +258,7 @@ GameObject:
   - component: {fileID: 131745649}
   - component: {fileID: 131745648}
   - component: {fileID: 131745651}
+  - component: {fileID: 131745652}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -383,6 +384,21 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &131745652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131745647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f07f0f5d28132e4fad2d1de1cd23ae6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraDrift
+  smoothTime: 1
+  fishSwitchTime: 12.5
+  minY: -0.25
 --- !u!1 &601596146
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,7 +506,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -3.5, z: 0}
-  m_LocalScale: {x: 30, y: 0.2, z: 8}
+  m_LocalScale: {x: 75, y: 0.2, z: 8}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -525,6 +541,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b21f8435717930a419a3e9dc91052e5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishLoader
+  reloadSeconds: 60
 --- !u!4 &854159266
 Transform:
   m_ObjectHideFlags: 0
@@ -554,6 +571,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishFactory
   tank: {fileID: 1768054593}
   fishMaterial: {fileID: 2100000, guid: fb9eef4fd382f4443ac55d5b5f306052, type: 2}
+  sphereMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  cubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  fishList: []
 --- !u!1 &1300356180
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,8 +680,8 @@ Transform:
   m_GameObject: {fileID: 1300356180}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3.5}
-  m_LocalScale: {x: 30, y: 16, z: 0.2}
+  m_LocalPosition: {x: 0, y: 4.5, z: 3.5}
+  m_LocalScale: {x: 75, y: 16, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -710,7 +730,56 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1953c7206128128468f9df343e892904, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TankBounds
-  size: {x: 24, y: 6.7, z: 5}
+  size: {x: 24, y: 6, z: 5}
+--- !u!1 &2035377390
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2035377392}
+  - component: {fileID: 2035377391}
+  m_Layer: 0
+  m_Name: FloorBubbles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2035377391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035377390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c3cac5db97e8124793c71a79c00741d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  floorSize: {x: 20, y: 6}
+  floorHeight: -3.4
+  emitterPrefab: {fileID: 4358888089217778219, guid: e8c73ad3d4f2cba4390d32202af6861e, type: 3}
+  minLifetime: 10
+  maxLifetime: 60
+--- !u!4 &2035377392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035377390}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -3.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -721,3 +790,4 @@ SceneRoots:
   - {fileID: 1300356184}
   - {fileID: 1768054592}
   - {fileID: 854159266}
+  - {fileID: 2035377392}

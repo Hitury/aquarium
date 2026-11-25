@@ -1,0 +1,15 @@
+{
+  "name": "Testvis2",
+  "maker": "Firda",
+  "body": "long",
+  "fins": "small",
+  "pattern": "stripes",
+  "colors": {
+    "body": "#bdd600",
+    "fins": "#140501",
+    "pattern": "#160121"
+  },
+  "size": 1,
+  "speed": 1,
+  "behavior": "calm"
+}
